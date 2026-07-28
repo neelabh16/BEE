@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Neelabh's Formula 1 inspired software developer portfolio.">
+  <title>Neelabh | F1 Developer Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="loading-screen" id="loadingScreen" aria-live="polite" aria-label="Loading portfolio">
+    <div class="start-sequence">
+      <span class="light"></span>
+      <span class="light"></span>
+      <span class="light"></span>
+      <span class="light"></span>
+      <span class="light"></span>
+    </div>
+    <div class="rpm-gauge" aria-hidden="true">
+      <span></span>
+    </div>
+    <p class="loader-label">ENGINE MAP 01 / DRS ARMED</p>
+    <div class="loader-track">
+      <span id="loaderProgress"></span>
+    </div>
+  </div>
+
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <nav class="nav" id="nav" aria-label="Primary navigation">
+    <a class="brand" href="#hero" aria-label="Neelabh home">
+      <span>N</span>
+      <small>Telemetry</small>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Timeline</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <main class="page-shell" id="pageShell">
+    <section class="hero section" id="hero" data-section="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-content reveal">
+        <p class="section-kicker">Lap 01 / Portfolio Mode</p>
+        <h1>NEELABH</h1>
+        <div class="role-switch" aria-label="Professional roles">
+          <span>Software Engineer</span>
+          <span>Machine Learning</span>
+          <span>Data Analytics</span>
+          <span>Frontend Developer</span>
+          <!-- <span>Formula 1 Enthusiast</span> -->
+        </div>
+        <p class="hero-copy">Building precise, high-performance digital systems with the discipline of race engineering and the restraint of modern luxury interfaces.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+          <a class="btn btn-ghost" href="Neelabh_Resume.pdf" download="Neelabh_Resume.pdf">Download Resume</a>
+        </div>
+      </div>
+
+      <div class="car-stage reveal" aria-label="Formula 1 inspired technical illustration">
+        <svg class="f1-outline" viewBox="0 0 820 360" role="img" aria-labelledby="carTitle">
+          <title id="carTitle">Sleek Formula 1 inspired outline</title>
+          <defs>
+            <linearGradient id="carStroke" x1="0" x2="1">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="46%" stop-color="#ffffff"/>
+              <stop offset="100%" stop-color="#ff6b00"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <path class="car-line" d="M63 224 C132 202 202 197 286 203 C327 169 369 146 433 151 C489 155 530 181 563 202 C631 205 700 211 763 230"/>
+          <path class="car-line thin" d="M197 203 C245 164 309 142 398 136 C494 129 554 154 628 205"/>
+          <path class="car-line thin" d="M266 207 L320 255 L512 255 L566 205"/>
+          <path class="car-line" d="M90 242 L226 242 C257 242 285 256 305 279 L521 279 C543 257 572 244 603 244 L752 244"/>
+          <path class="car-line accent" d="M340 152 L417 111 L493 153"/>
+          <circle class="wheel" cx="232" cy="265" r="54"/>
+          <circle class="wheel" cx="603" cy="265" r="54"/>
+          <circle class="hub" cx="232" cy="265" r="18"/>
+          <circle class="hub" cx="603" cy="265" r="18"/>
+        </svg>
+        <div class="speed-widget">
+          <span>3<sup>rd</sup></span>
+          <small>Year</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="about section" id="about" data-section="about">
+      <div class="section-heading reveal">
+        <p class="section-kicker">Driver Profile</p>
+        <h2>Engineer mindset, race-day focus.</h2>
+      </div>
+      <div class="about-layout">
+        <div class="portrait-panel reveal">
+          <div class="portrait-placeholder">
+            <span>NEELABH</span>
+          </div>
+          <div class="panel-readout">
+            <strong>STATUS</strong>
+            <span>Available for ambitious builds</span>
+          </div>
+        </div>
+        <div class="about-copy reveal">
+          <p>I design and build thoughtful software experiences across frontend interfaces, data products, and machine learning workflows. My work is driven by clarity, performance, and a love for systems that feel sharp under pressure.</p>
+          <p>Like an F1 garage, my process balances creative intuition with telemetry: test the idea, measure the result, improve the lap.</p>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <strong data-count="7">0</strong>
+              <span>Projects</span>
+            </div>
+            <div class="stat-card">
+              <strong data-count="60">0</strong>
+              <span>DSA Problems</span>
+            </div>
+            <div class="stat-card">
+              <strong data-count="5">0</strong>
+              <span>Technologies</span>
+            </div>
+            <div class="stat-card">
+              <strong data-count="3">0</strong>
+              <span>Years Learning</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="skills section" id="skills" data-section="skills">
+      <div class="section-heading reveal">
+        <p class="section-kicker">Telemetry Stack</p>
+        <h2>Systems tuned for speed and precision.</h2>
+      </div>
+      <div class="skills-grid">
+        <article class="skill-card reveal"><span>01</span><h3>HTML</h3><p>Semantic structure, accessibility, resilient documents.</p></article>
+        <article class="skill-card reveal"><span>02</span><h3>CSS</h3><p>Responsive systems, motion, premium interaction polish.</p></article>
+        <article class="skill-card reveal"><span>03</span><h3>JavaScript</h3><p>Clean browser logic, interfaces, performance-minded DOM work.</p></article>
+        <article class="skill-card reveal"><span>04</span><h3>Java</h3><p>Problem solving, OOP, data structures, backend fundamentals.</p></article>
+        <article class="skill-card reveal"><span>05</span><h3>Python</h3><p>Automation, analytics, ML experimentation, rapid tooling.</p></article>
+        <article class="skill-card reveal"><span>06</span><h3>SQL</h3><p>Query design, relational thinking, analytics-ready data.</p></article>
+        <article class="skill-card reveal"><span>07</span><h3>Machine Learning</h3><p>Model workflows, evaluation, intelligent product features.</p></article>
+        <article class="skill-card reveal"><span>08</span><h3>TensorFlow</h3><p>Neural network prototyping and applied learning systems.</p></article>
+        <article class="skill-card reveal"><span>09</span><h3>Data Analysis</h3><p>Insights, visualization, evidence-led product decisions.</p></article>
+        <article class="skill-card reveal"><span>10</span><h3>Git</h3><p>Version control discipline and clean iteration history.</p></article>
+        <article class="skill-card reveal"><span>11</span><h3>GitHub</h3><p>Collaboration, pull requests, repository workflows.</p></article>
+      </div>
+    </section>
+
+    <section class="projects section" id="projects" data-section="projects">
+      <div class="section-heading reveal">
+        <p class="section-kicker">Garage Displays</p>
+        <h2>Selected builds from the pit wall.</h2>
+      </div>
+      <div class="project-grid">
+        <article class="project-card reveal">
+          <div class="project-visual visual-one"><span>Health</span></div>
+          <div class="project-body">
+            <p>Sector 01</p>
+            <h3>CureClick Healthcare</h3>
+            <span>Django healthcare platform combining online pharmacy flows, prescription uploads, cart checkout, and doctor appointment booking.</span>
+            <div class="project-meta"><strong>Booking + pharmacy</strong><strong>Django 5.2</strong></div>
+            <div class="tags"><small>Django</small><small>Bootstrap</small><small>SQLite</small></div>
+            <div class="card-actions"><a href="https://github.com/Aditya-330/Django-healthcare-booking-pharmacy-" target="_blank" rel="noreferrer">GitHub</a></div>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="project-visual visual-two"><span>Finance</span></div>
+          <div class="project-body">
+            <p>Sector 02</p>
+            <h3>WealthFlow X AI</h3>
+            <span>AI-powered personal finance product with round-ups, goals, investment visibility, anomaly surfaces, reports, and advisor chat.</span>
+            <div class="project-meta"><strong>Full stack</strong><strong>AI advisor</strong></div>
+            <div class="tags"><small>Next.js</small><small>Django</small><small>Recharts</small></div>
+            <div class="card-actions"><a href="https://github.com/neelabh16/WealthFlowXAI" target="_blank" rel="noreferrer">GitHub</a></div>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="project-visual visual-three"><span>Aero</span></div>
+          <div class="project-body">
+            <p>Sector 03</p>
+            <h3>AeroVelocity</h3>
+            <span>Formula 1 aerodynamics analysis platform using telemetry, physics simulation, ML predictions, and AI recommendations.</span>
+            <div class="project-meta"><strong>24 circuits</strong><strong>FastF1 data</strong></div>
+            <div class="tags"><small>React</small><small>FastAPI</small><small>ML</small></div>
+            <div class="card-actions"><a href="https://github.com/HydraDocOc/Aero-Velocity" target="_blank" rel="noreferrer">GitHub</a></div>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="project-visual visual-four"><span>Risk</span></div>
+          <div class="project-body">
+            <p>Sector 04</p>
+            <h3>APEX Conflict Risk Pipeline</h3>
+            <span>Leakage-free geopolitical conflict risk workflow with temporal validation, SHAP explainability, tuning, and ensemble modeling.</span>
+            <div class="project-meta"><strong>5,006 rows</strong><strong>SHAP + Optuna</strong></div>
+            <div class="tags"><small>Python</small><small>XGBoost</small><small>LightGBM</small></div>
+            <div class="card-actions"><a href="../Downloads/APEX_Conflict_Risk_Pipeline_LEAKAGE_FREE_v3.ipynb">Notebook</a></div>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="project-visual visual-five"><span>Behavior</span></div>
+          <div class="project-body">
+            <p>Sector 05</p>
+            <h3>Human Inconsistency RP</h3>
+            <span>Behavioral ML research project predicting contradictory human decisions from World Values Survey Wave 7 responses.</span>
+            <div class="project-meta"><strong>97k responses</strong><strong>SHAP explained</strong></div>
+            <div class="tags"><small>Python</small><small>XGBoost</small><small>Research</small></div>
+            <div class="card-actions"><a href="../Downloads/Human_Inconsistency_RP.ipynb">Notebook</a></div>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="project-visual visual-six"><span>Safety</span></div>
+          <div class="project-body">
+            <p>Sector 06</p>
+            <h3>Shutdown Compliance Classification</h3>
+            <span>AI-safety classification notebook reframing shutdown compliance as corrigibility tier prediction with grouped validation.</span>
+            <div class="project-meta"><strong>77 models</strong><strong>SVM + MLP</strong></div>
+            <div class="tags"><small>PyTorch</small><small>SVM</small><small>AI Safety</small></div>
+            <div class="card-actions"><a href="../Downloads/Shutdown_Compliance_Classification%20(2).ipynb">Notebook</a></div>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="project-visual visual-seven"><span>Music</span></div>
+          <div class="project-body">
+            <p>Sector 07</p>
+            <h3>SaRune Music Web App</h3>
+            <span>Multi-page music website from the attached zip, with artist discovery, library and search pages, auth screens, dark mode, and audio playback controls.</span>
+            <div class="project-meta"><strong>9 page areas</strong><strong>Audio player</strong></div>
+            <div class="tags"><small>HTML</small><small>CSS</small><small>JavaScript</small></div>
+            <div class="card-actions"><a href="../ProjectSite.zip">Source Zip</a><a href="../ProjectSite/IndexPage/index.html">Open Site</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="experience section" id="experience" data-section="experience">
+      <div class="section-heading reveal">
+        <p class="section-kicker">Race Calendar</p>
+        <h2>Milestones connected by momentum.</h2>
+      </div>
+      <div class="timeline">
+        <article class="timeline-item reveal">
+          <span class="timeline-icon">PIT</span>
+          <div><time>2024</time><h3>Foundation Lap</h3><p>Studied Python and frontend development, building core programming and web fundamentals.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <span class="timeline-icon">ERS</span>
+          <div><time>2025</time><h3>Backend &amp; Data Systems</h3><p>Built backend systems with Flask and Django, explored data analytics and AI, and sharpened DSA in C++.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <span class="timeline-icon">DRS</span>
+          <div><time>2026</time><h3>ML Research Push</h3><p>Focused on Machine Learning, Deep Learning, and neural networks, working on numerous research papers, alongside strengthening DSA in Java.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact section" id="contact" data-section="contact">
+      <div class="section-heading reveal">
+        <p class="section-kicker">Team Radio</p>
+        <h2>Open a channel.</h2>
+      </div>
+      <form class="contact-console reveal" action="https://formsubmit.co/neelabh1626@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New message from portfolio site">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <label>
+          <span>Name</span>
+          <input type="text" name="name" autocomplete="name" placeholder="Your name" required>
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+        </label>
+        <label>
+          <span>Message</span>
+          <textarea name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+        </label>
+        <button class="btn btn-primary" type="submit">Activate DRS</button>
+        <p class="form-status" data-status hidden>Transmission sent. I'll get back to you soon.</p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="racing-stripe" aria-hidden="true"></div>
+    <p>NEELABH / ENGINEERED WITH PRECISION</p>
+    <div class="socials">
+      <a href="#" aria-label="GitHub">GH</a>
+      <a href="#" aria-label="LinkedIn">IN</a>
+      <a href="mailto:hello@example.com" aria-label="Email">EM</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

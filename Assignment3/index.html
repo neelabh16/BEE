@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Feedback Form</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    padding: 30px;
+}
+
+.container {
+    width: 700px;
+    margin: auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    min-height: 20px;
+}
+
+button {
+    padding: 10px 18px;
+    margin-top: 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#sessionUser {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+#storedData {
+    margin-top: 15px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #fafafa;
+    min-height: 80px;
+}
+
+#storedData p {
+    margin-bottom: 8px;
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Feedback Form</h1>
+
+        <form id="feedbackForm">
+
+            <label for="name">Student Name</label>
+            <input type="text" id="name">
+            <p class="error" id="nameError"></p>
+
+            <label for="email">Email</label>
+            <input type="email" id="email">
+            <p class="error" id="emailError"></p>
+
+            <label for="course">Course</label>
+
+            <select id="course">
+                <option value="">Select Course</option>
+                <option value="B.Tech">B.Tech</option>
+                <option value="BCA">BCA</option>
+                <option value="MCA">MCA</option>
+                <option value="MBA">MBA</option>
+            </select>
+
+            <p class="error" id="courseError"></p>
+
+            <label for="feedback">Feedback</label>
+            <textarea id="feedback"></textarea>
+            <p class="error" id="feedbackError"></p>
+
+            <button type="submit">Submit Feedback</button>
+            <button type="button" id="deleteBtn">
+                Delete Stored Data
+            </button>
+
+        </form>
+
+        <h2 id="sessionUser">
+            Current Session User: None
+        </h2>
+
+        <h1>Stored Feedback</h1>
+
+        <div id="storedData">
+            No feedback stored.
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

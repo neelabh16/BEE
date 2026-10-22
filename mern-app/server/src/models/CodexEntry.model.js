@@ -40,7 +40,6 @@ const codexEntrySchema = new mongoose.Schema({
   timestamps: true,
 });
 
-codexEntrySchema.index({ slug: 1 });
 codexEntrySchema.index({ author: 1 });
 codexEntrySchema.index({ category: 1 });
 codexEntrySchema.index({ tags: 1 });

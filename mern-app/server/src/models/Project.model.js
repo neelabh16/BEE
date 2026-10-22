@@ -62,7 +62,6 @@ const projectSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-projectSchema.index({ slug: 1 });
 projectSchema.index({ owner: 1 });
 projectSchema.index({ category: 1 });
 projectSchema.index({ technologies: 1 });

@@ -67,8 +67,6 @@ const userSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-userSchema.index({ username: 1 });
-userSchema.index({ email: 1 });
 userSchema.index({ score: -1 });
 userSchema.index({ skills: 1 });
 

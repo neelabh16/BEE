@@ -55,7 +55,6 @@ const hackathonSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-hackathonSchema.index({ slug: 1 });
 hackathonSchema.index({ organizer: 1 });
 hackathonSchema.index({ status: 1 });
 hackathonSchema.index({ startDate: 1 });

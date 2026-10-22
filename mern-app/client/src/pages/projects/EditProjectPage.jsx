@@ -1,0 +1,402 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import EmptyState from '../../components/common/EmptyState';
+import './Projects.css';
+
+const CATEGORIES = [
+  { value: 'web', label: 'Web Development' },
+  { value: 'mobile', label: 'Mobile Apps' },
+  { value: 'ai-ml', label: 'AI & Machine Learning' },
+  { value: 'devtools', label: 'Developer Tools' },
+  { value: 'blockchain', label: 'Blockchain & Web3' },
+  { value: 'gamedev', label: 'Game Development' },
+  { value: 'iot', label: 'Internet of Things' },
+  { value: 'cloud', label: 'Cloud & DevOps' },
+  { value: 'cybersecurity', label: 'Cybersecurity' },
+  { value: 'data', label: 'Data Science' },
+  { value: 'other', label: 'Other' },
+];
+
+export default function EditProjectPage() {
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const toast = useToast();
+
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: '',
+    category: 'web',
+    description: '',
+    technologies: '',
+    githubUrl: '',
+    liveUrl: '',
+    coverImage: '',
+    status: 'published',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  // Fetch project to edit
+  const fetchProject = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await api.get(`/projects/slug/${slug}`);
+      const data = res.data;
+      if (!data) {
+        throw new Error('Project not found');
+      }
+
+      // Check ownership
+      const currentUserId = user ? (user._id || user.id).toString() : null;
+      const ownerId = data.owner ? (data.owner._id || data.owner).toString() : null;
+
+      if (!currentUserId || (currentUserId !== ownerId && user.role !== 'admin')) {
+        toast.error('You are not authorized to edit this project');
+        navigate(`/projects/${slug}`);
+        return;
+      }
+
+      setProject(data);
+      setFormData({
+        title: data.title || '',
+        category: data.category || 'web',
+        description: data.description || '',
+        technologies: Array.isArray(data.technologies) ? data.technologies.join(', ') : '',
+        githubUrl: data.githubUrl || '',
+        liveUrl: data.liveUrl || '',
+        coverImage: data.coverImage || '',
+        status: data.status || 'published',
+      });
+    } catch (err) {
+      setError(err.message || 'Failed to load project');
+    } finally {
+      setLoading(false);
+    }
+  }, [slug, user, navigate, toast]);
+
+  useEffect(() => {
+    fetchProject();
+  }, [fetchProject]);
+
+  // Validation
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.title.trim()) {
+      newErrors.title = 'Project title is required';
+    } else if (formData.title.trim().length > 100) {
+      newErrors.title = 'Title must be 100 characters or fewer';
+    }
+
+    if (!formData.category) {
+      newErrors.category = 'Please select a category';
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = 'Project description is required';
+    } else if (formData.description.trim().length > 5000) {
+      newErrors.description = 'Description must be 5000 characters or fewer';
+    }
+
+    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i;
+
+    if (formData.githubUrl.trim() && !urlPattern.test(formData.githubUrl.trim())) {
+      newErrors.githubUrl = 'Please provide a valid URL for GitHub';
+    }
+
+    if (formData.liveUrl.trim() && !urlPattern.test(formData.liveUrl.trim())) {
+      newErrors.liveUrl = 'Please provide a valid live demo URL';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) {
+      toast.error('Please fix the errors in the form');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const techList = formData.technologies
+        ? formData.technologies
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [];
+
+      const payload = {
+        title: formData.title.trim(),
+        category: formData.category,
+        description: formData.description.trim(),
+        technologies: techList,
+        githubUrl: formData.githubUrl.trim(),
+        liveUrl: formData.liveUrl.trim(),
+        coverImage: formData.coverImage.trim(),
+        status: formData.status,
+      };
+
+      const res = await api.put(`/projects/${project._id}`, payload);
+      toast.success('Project updated successfully! ✨');
+      const updatedSlug = res.data?.slug || project.slug;
+      navigate(`/projects/${updatedSlug}`);
+    } catch (err) {
+      const msg = err.data?.message || err.message || 'Failed to update project';
+      toast.error(msg);
+      if (err.data?.errors) {
+        setErrors(err.data.errors);
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="project-form-page">
+        <div className="project-form-container">
+          <LoadingSpinner size="lg" message="Loading project for editing..." />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !project) {
+    return (
+      <div className="project-form-page">
+        <div className="project-form-container">
+          <EmptyState
+            title="Project Not Found"
+            message={error || 'The project could not be found.'}
+            actionLabel="Back to Explore"
+            actionLink="/explore"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="project-form-page">
+      <div className="project-form-container">
+        {/* Navigation Breadcrumb */}
+        <div className="project-breadcrumb" style={{ marginBottom: '1.5rem' }}>
+          <Link to="/explore">Explore</Link>
+          <span>/</span>
+          <Link to={`/projects/${project.slug}`}>{project.title}</Link>
+          <span>/</span>
+          <span className="text-dim">Edit</span>
+        </div>
+
+        <div className="project-form-card">
+          <header className="project-form-header">
+            <h1 className="project-form-title">Edit Project</h1>
+            <p className="project-form-subtitle">
+              Update project information, links, and stack details.
+            </p>
+          </header>
+
+          <form onSubmit={handleSubmit} className="project-form" noValidate>
+            {/* Title */}
+            <div className="form-group">
+              <label htmlFor="title" className="form-label">
+                Project Title <span className="text-accent">*</span>
+              </label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                className={`form-input ${errors.title ? 'error' : ''}`}
+                value={formData.title}
+                onChange={handleChange}
+                maxLength={100}
+                required
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {errors.title ? (
+                  <span className="form-error">{errors.title}</span>
+                ) : (
+                  <span className="form-hint">A concise title for your project</span>
+                )}
+                <span className="form-hint">{formData.title.length}/100</span>
+              </div>
+            </div>
+
+            {/* Category */}
+            <div className="form-group">
+              <label htmlFor="category" className="form-label">
+                Primary Category <span className="text-accent">*</span>
+              </label>
+              <select
+                id="category"
+                name="category"
+                className={`form-select ${errors.category ? 'error' : ''}`}
+                value={formData.category}
+                onChange={handleChange}
+              >
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+              {errors.category && <span className="form-error">{errors.category}</span>}
+            </div>
+
+            {/* Description */}
+            <div className="form-group">
+              <label htmlFor="description" className="form-label">
+                Project Overview & Details <span className="text-accent">*</span>
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                className={`form-textarea ${errors.description ? 'error' : ''}`}
+                rows={6}
+                value={formData.description}
+                onChange={handleChange}
+                maxLength={5000}
+                required
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {errors.description ? (
+                  <span className="form-error">{errors.description}</span>
+                ) : (
+                  <span className="form-hint">Markdown formatting is supported</span>
+                )}
+                <span className="form-hint">{formData.description.length}/5000</span>
+              </div>
+            </div>
+
+            {/* Technologies */}
+            <div className="form-group">
+              <label htmlFor="technologies" className="form-label">
+                Technologies & Tools
+              </label>
+              <input
+                id="technologies"
+                name="technologies"
+                type="text"
+                className="form-input"
+                placeholder="e.g. React, Express, MongoDB, Tailwind"
+                value={formData.technologies}
+                onChange={handleChange}
+              />
+              <span className="form-hint">Separate stack items with commas</span>
+            </div>
+
+            {/* GitHub & Live Demo URLs */}
+            <div className="project-form-row">
+              <div className="form-group">
+                <label htmlFor="githubUrl" className="form-label">
+                  GitHub Repository URL
+                </label>
+                <input
+                  id="githubUrl"
+                  name="githubUrl"
+                  type="url"
+                  className={`form-input ${errors.githubUrl ? 'error' : ''}`}
+                  value={formData.githubUrl}
+                  onChange={handleChange}
+                />
+                {errors.githubUrl && <span className="form-error">{errors.githubUrl}</span>}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="liveUrl" className="form-label">
+                  Live Demo URL
+                </label>
+                <input
+                  id="liveUrl"
+                  name="liveUrl"
+                  type="url"
+                  className={`form-input ${errors.liveUrl ? 'error' : ''}`}
+                  value={formData.liveUrl}
+                  onChange={handleChange}
+                />
+                {errors.liveUrl && <span className="form-error">{errors.liveUrl}</span>}
+              </div>
+            </div>
+
+            {/* Cover Image URL */}
+            <div className="form-group">
+              <label htmlFor="coverImage" className="form-label">
+                Cover Image URL
+              </label>
+              <input
+                id="coverImage"
+                name="coverImage"
+                type="url"
+                className="form-input"
+                placeholder="https://..."
+                value={formData.coverImage}
+                onChange={handleChange}
+              />
+              {formData.coverImage.trim() && (
+                <div className="project-cover-preview">
+                  <img
+                    src={formData.coverImage.trim()}
+                    alt="Cover preview"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                    onLoad={(e) => {
+                      e.target.style.display = 'block';
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Form Footer Buttons */}
+            <div className="project-form-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => navigate(`/projects/${project.slug}`)}
+                disabled={submitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={submitting}
+              >
+                {submitting ? (
+                  <>
+                    <span className="spinner" style={{ width: 14, height: 14, borderWidth: 2 }} />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <span>Save Changes</span>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}

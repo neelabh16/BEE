@@ -1,0 +1,61 @@
+/* =====================================================
+   LoadingSpinner Styles — DevVerse Design System
+   ===================================================== */
+
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.loading-spinner-container.fullscreen {
+  position: fixed;
+  inset: 0;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  z-index: 1000;
+}
+
+.loading-spinner-circle {
+  border-radius: var(--radius-full);
+  border-style: solid;
+  border-color: var(--bg-hover);
+  border-top-color: var(--accent);
+  animation: spin 0.65s linear infinite;
+}
+
+.loading-spinner-circle.size-sm {
+  width: 18px;
+  height: 18px;
+  border-width: 2px;
+}
+
+.loading-spinner-circle.size-md {
+  width: 28px;
+  height: 28px;
+  border-width: 2.5px;
+}
+
+.loading-spinner-circle.size-lg {
+  width: 44px;
+  height: 44px;
+  border-width: 3.5px;
+}
+
+.loading-spinner-circle.size-xl {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+.loading-spinner-message {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: var(--fw-medium);
+  text-align: center;
+  animation: pulse 1.8s ease-in-out infinite;
+}

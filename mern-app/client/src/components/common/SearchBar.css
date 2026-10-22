@@ -1,0 +1,78 @@
+/* =====================================================
+   SearchBar Styles — DevVerse Design System
+   ===================================================== */
+
+.search-bar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-bar-icon {
+  position: absolute;
+  left: var(--space-4);
+  width: 18px;
+  height: 18px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.search-bar-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 var(--space-10) 0 var(--space-10);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--bg-glass-border);
+  border-radius: var(--radius-lg);
+  outline: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.search-bar-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-bar-input:hover {
+  border-color: var(--accent-soft);
+  background: var(--bg-elevated);
+}
+
+.search-bar-input:focus {
+  border-color: var(--accent);
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.search-bar-input:focus + .search-bar-icon {
+  color: var(--accent);
+}
+
+.search-bar-clear-btn {
+  position: absolute;
+  right: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--bg-hover);
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.search-bar-clear-btn:hover {
+  background: var(--accent-softer);
+  color: var(--text-primary);
+}
+
+.search-bar-clear-btn svg {
+  width: 14px;
+  height: 14px;
+}

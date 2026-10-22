@@ -1,0 +1,59 @@
+/* =====================================================
+   EmptyState Styles — DevVerse Design System
+   ===================================================== */
+
+.empty-state-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16) var(--space-6);
+  text-align: center;
+  background: var(--bg-secondary);
+  border: 1px dashed var(--bg-glass-border);
+  border-radius: var(--radius-2xl);
+  margin: var(--space-6) 0;
+  width: 100%;
+}
+
+.empty-state-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-2xl);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--bg-glass-border);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.empty-state-icon-box svg {
+  width: 36px;
+  height: 36px;
+  color: var(--accent);
+}
+
+.empty-state-title {
+  font-size: var(--text-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.empty-state-message {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  max-width: 440px;
+  line-height: var(--leading-normal);
+  margin-bottom: var(--space-6);
+}
+
+.empty-state-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}

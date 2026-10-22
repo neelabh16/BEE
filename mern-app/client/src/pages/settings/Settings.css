@@ -1,0 +1,213 @@
+/* =====================================================
+   DevVerse — Account Settings & Preferences Stylesheet
+   ===================================================== */
+
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-20);
+  min-height: calc(100vh - var(--navbar-height));
+}
+
+.settings-header {
+  margin-bottom: var(--space-6);
+}
+
+.settings-header h1 {
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-1);
+}
+
+.settings-header p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+/* Tabs */
+.settings-tabs-nav {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--bg-glass-border);
+  margin-bottom: var(--space-8);
+}
+
+.settings-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--duration-fast);
+}
+
+.settings-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.settings-tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Form Card */
+.settings-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--bg-glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+}
+
+.settings-card-header {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--bg-glass-border);
+}
+
+.settings-card-header h2 {
+  font-size: var(--text-lg);
+  font-weight: var(--fw-bold);
+  margin-bottom: 2px;
+}
+
+.settings-card-header p {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.settings-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .settings-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-avatar-preview-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.settings-avatar-preview {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}
+
+.settings-actions-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--bg-glass-border);
+}
+
+/* Appearance Theme Grid */
+.appearance-theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+@media (max-width: 600px) {
+  .appearance-theme-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.theme-choice-card {
+  background: var(--bg-tertiary);
+  border: 2px solid var(--bg-glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: all var(--duration-fast);
+  text-align: left;
+}
+
+.theme-choice-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.theme-choice-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-softer);
+  box-shadow: 0 0 20px rgba(124, 111, 255, 0.15);
+}
+
+.theme-preview-box {
+  height: 90px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.theme-preview-box.dark {
+  background: #0a0b10;
+  color: #e8e6f0;
+}
+
+.theme-preview-box.light {
+  background: #f8f9fc;
+  color: #1a1b2e;
+}
+
+.theme-preview-bar {
+  height: 8px;
+  width: 50%;
+  border-radius: 4px;
+  background: #7c6fff;
+}
+
+.theme-preview-sub {
+  height: 6px;
+  width: 80%;
+  border-radius: 3px;
+  background: rgba(124, 111, 255, 0.3);
+}
+
+.theme-choice-title {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.theme-choice-desc {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}

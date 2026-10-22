@@ -9,6 +9,7 @@ export default function CommandPalette({ isOpen, onClose }) {
 
   const commands = [
     { id: 'home', title: 'Home', section: 'Navigation', url: '/' },
+    { id: 'dashboard', title: 'Dashboard', section: 'Navigation', url: '/dashboard' },
     { id: 'explore', title: 'Explore Projects', section: 'Navigation', url: '/explore' },
     { id: 'submit-project', title: 'Submit a Project', section: 'Actions', url: '/projects/new' },
     { id: 'communities', title: 'Communities', section: 'Navigation', url: '/communities' },

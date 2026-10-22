@@ -40,7 +40,7 @@ export default function Navbar({ onOpenCmdk }) {
   };
 
   const navItems = [
-    { label: 'Home', href: user ? '/dashboard' : '/', match: (p) => p === '/' || p === '/dashboard' },
+    { label: 'Home', href: '/', match: (p) => p === '/' },
     { label: 'Explore', href: '/explore', match: (p) => p.startsWith('/explore') || p.startsWith('/projects') },
     { label: 'Communities', href: '/communities', match: (p) => p.startsWith('/communities') || p.startsWith('/discussions') },
     { label: 'Hackathons', href: '/hackathons', match: (p) => p.startsWith('/hackathons') },
@@ -215,6 +215,9 @@ export default function Navbar({ onOpenCmdk }) {
         ))}
         {user ? (
           <>
+            <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+              Dashboard
+            </Link>
             <Link to={`/profile/${user.username}`} onClick={() => setMobileMenuOpen(false)}>
               My Profile
             </Link>

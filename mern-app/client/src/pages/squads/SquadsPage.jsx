@@ -199,16 +199,23 @@ export default function SquadsPage() {
   };
 
   return (
-    <div className="squads-container animate-fade-in">
+    <div className="squads-page-wrap">
       {/* Header */}
-      <div className="squads-header">
-        <h1>
-          Squad <span className="grad-text">Finder & Teammates</span>
-        </h1>
-        <p>
-          Discover skilled developers, form high-performance project squads, build together, and conquer hackathons.
-        </p>
-      </div>
+      <section className="wrap page-header">
+        <div className="page-header-flex">
+          <div className="page-header-text">
+            <div className="eyebrow">Find your people</div>
+            <h1 style={{ fontSize: 'clamp(34px,5vw,54px)' }}>
+              Squad <span className="grad-text">Finder</span>
+            </h1>
+            <p className="lede">
+              Discover skilled developers, form high-performance project squads, build together, and conquer hackathons.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="wrap section-tight" style={{ paddingTop: 0 }}>
 
       {/* Tabs Navigation */}
       <div className="squads-tabs-nav">
@@ -730,6 +737,7 @@ export default function SquadsPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

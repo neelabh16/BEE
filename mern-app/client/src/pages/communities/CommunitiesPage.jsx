@@ -185,26 +185,26 @@ export default function CommunitiesPage() {
   };
 
   return (
-    <div className="communities-page">
-      <div className="communities-container">
-        {/* Header */}
-        <div className="communities-header">
-          <div className="communities-header-left">
-            <h1 className="communities-title">Developer Communities</h1>
-            <p className="communities-subtitle">
-              Join specialized developer groups, collaborate on technical challenges, share insights, and build together.
+    <div className="communities-page-wrap">
+      {/* Header */}
+      <section className="wrap page-header">
+        <div className="page-header-flex">
+          <div className="page-header-text">
+            <div className="eyebrow">Find your people</div>
+            <h1 style={{ fontSize: 'clamp(34px, 5vw, 54px)' }}>Communities</h1>
+            <p className="lede">
+              Technology groups full of people who ship — join the conversation.
             </p>
           </div>
-          <div className="communities-header-actions">
+          <div className="page-header-actions">
             <Link to="/communities/new" className="btn btn-primary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-              <span>Create Community</span>
+              + Create Community
             </Link>
           </div>
         </div>
+      </section>
+
+      <section className="wrap section-tight" style={{ paddingTop: 0 }}>
 
         {/* Toolbar: Search, Topics, Sort */}
         <div className="communities-toolbar">
@@ -399,7 +399,7 @@ export default function CommunitiesPage() {
             )}
           </>
         )}
-      </div>
+      </section>
     </div>
   );
 }

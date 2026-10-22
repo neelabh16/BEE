@@ -495,47 +495,107 @@ export default function SettingsPage() {
       {activeTab === 'appearance' && (
         <div className="settings-card animate-fade-in">
           <div className="settings-card-header">
-            <h2>Interface Theme</h2>
-            <p>Choose your preferred DevVerse display mode.</p>
+            <h2>Appearance & Accent Colors</h2>
+            <p>Customize the visual personality of your DevVerse workspace.</p>
           </div>
 
-          <div className="appearance-theme-grid">
-            <div
-              className={`theme-choice-card ${theme === 'dark' ? 'selected' : ''}`}
-              onClick={() => {
-                if (theme !== 'dark') toggleTheme();
-              }}
-            >
-              <div className="theme-preview-box dark">
-                <div className="theme-preview-bar" />
-                <div className="theme-preview-sub" />
+          <div style={{ marginBottom: '24px' }}>
+            <h4 style={{ marginBottom: '12px' }}>Theme Mode</h4>
+            <div className="appearance-theme-grid">
+              <div
+                className={`theme-choice-card ${theme === 'dark' ? 'selected' : ''}`}
+                onClick={() => {
+                  if (theme !== 'dark') toggleTheme();
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="theme-preview-box dark">
+                  <div className="theme-preview-bar" />
+                  <div className="theme-preview-sub" />
+                </div>
+                <div className="theme-choice-title">
+                  <span>🌙 Dark Theme (OS Cyber)</span>
+                  {theme === 'dark' && <span style={{ color: 'var(--accent)' }}>✓ Active</span>}
+                </div>
+                <p className="theme-choice-desc">
+                  High-contrast cyber developer dark palette optimized for late-night building and reduced eye strain.
+                </p>
               </div>
-              <div className="theme-choice-title">
-                <span>Dark Theme (Default)</span>
-                {theme === 'dark' && <span style={{ color: 'var(--accent)' }}>✓ Active</span>}
-              </div>
-              <p className="theme-choice-desc">
-                High-contrast cyber developer dark palette optimized for late-night building and reduced eye strain.
-              </p>
-            </div>
 
-            <div
-              className={`theme-choice-card ${theme === 'light' ? 'selected' : ''}`}
-              onClick={() => {
-                if (theme !== 'light') toggleTheme();
-              }}
-            >
-              <div className="theme-preview-box light">
-                <div className="theme-preview-bar" />
-                <div className="theme-preview-sub" />
+              <div
+                className={`theme-choice-card ${theme === 'light' ? 'selected' : ''}`}
+                onClick={() => {
+                  if (theme !== 'light') toggleTheme();
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="theme-preview-box light">
+                  <div className="theme-preview-bar" />
+                  <div className="theme-preview-sub" />
+                </div>
+                <div className="theme-choice-title">
+                  <span>☀️ Light Theme</span>
+                  {theme === 'light' && <span style={{ color: 'var(--accent)' }}>✓ Active</span>}
+                </div>
+                <p className="theme-choice-desc">
+                  Clean, modern light documentation aesthetic for daylight readability and presentation modes.
+                </p>
               </div>
-              <div className="theme-choice-title">
-                <span>Light Theme</span>
-                {theme === 'light' && <span style={{ color: 'var(--accent)' }}>✓ Active</span>}
+            </div>
+          </div>
+
+          {/* Accent Color Swatches */}
+          <div style={{ marginBottom: '28px', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
+            <h4 style={{ marginBottom: '6px' }}>Accent Color</h4>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Sets the highlight color used across buttons, links, glows, and badges.
+            </p>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+              {[
+                { id: 'violet', label: 'Violet', bg: 'var(--violet)' },
+                { id: 'cyan', label: 'Cyan', bg: 'var(--cyan)' },
+                { id: 'coral', label: 'Coral', bg: 'var(--coral)' },
+                { id: 'amber', label: 'Amber', bg: 'var(--amber)' },
+                { id: 'legend', label: 'Legend', bg: 'conic-gradient(#f0c419, var(--coral), var(--violet), var(--cyan), #f0c419)' },
+              ].map((sw) => (
+                <button
+                  key={sw.id}
+                  type="button"
+                  className={`swatch ${accent === sw.id ? 'active' : ''}`}
+                  onClick={() => setAccent(sw.id)}
+                  style={{
+                    background: sw.bg,
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    border: accent === sw.id ? '3px solid #fff' : '2px solid transparent',
+                    boxShadow: accent === sw.id ? '0 0 16px var(--accent)' : 'none',
+                    cursor: 'pointer',
+                    transform: accent === sw.id ? 'scale(1.15)' : 'scale(1)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  title={`${sw.label} accent`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Motion Toggle */}
+          <div style={{ paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <h4 style={{ marginBottom: '4px' }}>Interface Animations & Particles</h4>
+                <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  Controls floating particle dust, background aurora shifts, and card lift transitions.
+                </p>
               </div>
-              <p className="theme-choice-desc">
-                Clean, modern light documentation aesthetic for daylight readability and presentation modes.
-              </p>
+              <button
+                type="button"
+                className={`btn btn-sm ${motion === 'on' ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => setMotion(prev => prev === 'on' ? 'off' : 'on')}
+              >
+                Motion: {motion.toUpperCase()}
+              </button>
             </div>
           </div>
         </div>

@@ -7,17 +7,43 @@ export function ThemeProvider({ children }) {
     return localStorage.getItem('devverse-theme') || 'dark';
   });
 
+  const [accent, setAccent] = useState(() => {
+    return localStorage.getItem('devverse-accent') || 'violet';
+  });
+
+  const [motion, setMotion] = useState(() => {
+    return localStorage.getItem('devverse-motion') || 'on';
+  });
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('devverse-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-accent', accent);
+    localStorage.setItem('devverse-accent', accent);
+  }, [accent]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-motion', motion);
+    localStorage.setItem('devverse-motion', motion);
+  }, [motion]);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{
+      theme,
+      setTheme,
+      toggleTheme,
+      accent,
+      setAccent,
+      motion,
+      setMotion,
+    }}>
       {children}
     </ThemeContext.Provider>
   );

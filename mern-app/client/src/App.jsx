@@ -45,40 +45,42 @@ export default function App() {
 
   return (
     <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<LandingPage />} />
+      {/* Public routes (Explore & Discover) */}
+      <Route path="/" element={<AppLayout><LandingPage /></AppLayout>} />
+      <Route path="/explore" element={<AppLayout><ExplorePage /></AppLayout>} />
+      <Route path="/projects/:slug" element={<AppLayout><ProjectDetailPage /></AppLayout>} />
+      <Route path="/communities" element={<AppLayout><CommunitiesPage /></AppLayout>} />
+      <Route path="/communities/:slug" element={<AppLayout><CommunityDetailPage /></AppLayout>} />
+      <Route path="/discussions/:id" element={<AppLayout><DiscussionDetailPage /></AppLayout>} />
+      <Route path="/codex" element={<AppLayout><CodexPage /></AppLayout>} />
+      <Route path="/codex/:slug" element={<AppLayout><CodexDetailPage /></AppLayout>} />
+      <Route path="/hackathons" element={<AppLayout><HackathonsPage /></AppLayout>} />
+      <Route path="/hackathons/:slug" element={<AppLayout><HackathonDetailPage /></AppLayout>} />
+      <Route path="/leaderboard" element={<AppLayout><LeaderboardPage /></AppLayout>} />
+      <Route path="/profile/:username" element={<AppLayout><ProfilePage /></AppLayout>} />
+      <Route path="/portfolio/:username" element={<AppLayout><PublicPortfolioPage /></AppLayout>} />
+
+      {/* Auth */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/portfolio/:username" element={<PublicPortfolioPage />} />
 
-      {/* Protected routes with app layout */}
+      {/* Protected routes (Creation, Matchmaking & Personal Management) */}
       <Route path="/dashboard" element={<ProtectedRoute><AppLayout><DashboardPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/explore" element={<ProtectedRoute><AppLayout><ExplorePage /></AppLayout></ProtectedRoute>} />
       <Route path="/projects/new" element={<ProtectedRoute><AppLayout><CreateProjectPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/projects/:slug" element={<ProtectedRoute><AppLayout><ProjectDetailPage /></AppLayout></ProtectedRoute>} />
       <Route path="/projects/:slug/edit" element={<ProtectedRoute><AppLayout><EditProjectPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/communities" element={<ProtectedRoute><AppLayout><CommunitiesPage /></AppLayout></ProtectedRoute>} />
       <Route path="/communities/new" element={<ProtectedRoute><AppLayout><CreateCommunityPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/communities/:slug" element={<ProtectedRoute><AppLayout><CommunityDetailPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/discussions/:id" element={<ProtectedRoute><AppLayout><DiscussionDetailPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/codex" element={<ProtectedRoute><AppLayout><CodexPage /></AppLayout></ProtectedRoute>} />
       <Route path="/codex/new" element={<ProtectedRoute><AppLayout><CreateCodexPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/codex/:slug" element={<ProtectedRoute><AppLayout><CodexDetailPage /></AppLayout></ProtectedRoute>} />
       <Route path="/codex/:slug/edit" element={<ProtectedRoute><AppLayout><EditCodexPage /></AppLayout></ProtectedRoute>} />
       <Route path="/portfolio" element={<ProtectedRoute><AppLayout><PortfolioPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/hackathons" element={<ProtectedRoute><AppLayout><HackathonsPage /></AppLayout></ProtectedRoute>} />
       <Route path="/hackathons/new" element={<ProtectedRoute><AppLayout><CreateHackathonPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/hackathons/:slug" element={<ProtectedRoute><AppLayout><HackathonDetailPage /></AppLayout></ProtectedRoute>} />
       <Route path="/squads" element={<ProtectedRoute><AppLayout><SquadsPage /></AppLayout></ProtectedRoute>} />
       <Route path="/messages" element={<ProtectedRoute><AppLayout><MessagesPage /></AppLayout></ProtectedRoute>} />
       <Route path="/messages/:id" element={<ProtectedRoute><AppLayout><ConversationPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/leaderboard" element={<ProtectedRoute><AppLayout><LeaderboardPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/profile/:username" element={<ProtectedRoute><AppLayout><ProfilePage /></AppLayout></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><AppLayout><SettingsPage /></AppLayout></ProtectedRoute>} />
       <Route path="/bookmarks" element={<ProtectedRoute><AppLayout><BookmarksPage /></AppLayout></ProtectedRoute>} />
 
       {/* 404 */}
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="*" element={<AppLayout><NotFoundPage /></AppLayout>} />
     </Routes>
   );
 }

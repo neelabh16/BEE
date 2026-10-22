@@ -123,27 +123,26 @@ export default function HackathonsPage() {
   };
 
   return (
-    <div className="hackathons-container animate-fade-in">
+    <div className="hackathons-page-wrap">
       {/* Hero Header */}
-      <div className="hackathons-hero">
-        <div className="hackathons-hero-text">
-          <h1>
-            Global <span className="grad-text">Developer Hackathons</span>
-          </h1>
-          <p>
-            Build breakthrough applications, collaborate with elite squads, and compete for prestige and prizes across cutting-edge technology stacks.
-          </p>
+      <section className="wrap page-header">
+        <div className="page-header-flex">
+          <div className="page-header-text">
+            <div className="eyebrow">Compete &amp; win</div>
+            <h1 style={{ fontSize: 'clamp(34px, 5vw, 54px)' }}>Hackathons</h1>
+            <p className="lede">
+              Ship something in a weekend. Win prizes. Meet your next co-founder.
+            </p>
+          </div>
+          <div className="page-header-actions">
+            <Link to="/hackathons/new" className="btn btn-primary">
+              + Host Hackathon
+            </Link>
+          </div>
         </div>
-        <div className="hackathons-hero-actions">
-          <Link to="/hackathons/new" className="btn btn-primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Host Hackathon
-          </Link>
-        </div>
-      </div>
+      </section>
+
+      <section className="wrap section-tight" style={{ paddingTop: 0 }}>
 
       {/* Filter Toolbar */}
       <div className="hackathons-filters">
@@ -430,6 +429,7 @@ export default function HackathonsPage() {
           )}
         </>
       )}
+      </section>
     </div>
   );
 }

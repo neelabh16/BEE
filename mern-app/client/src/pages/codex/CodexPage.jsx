@@ -135,34 +135,26 @@ export default function CodexPage() {
   };
 
   return (
-    <div className="codex-container">
+    <div className="codex-page-wrap">
       {/* Header */}
-      <header className="codex-header">
-        <div className="codex-header-top">
-          <div className="codex-title-group">
-            <div className="codex-icon-badge" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                <line x1="9" y1="7" x2="15" y2="7" />
-                <line x1="9" y1="11" x2="13" y2="11" />
-              </svg>
-            </div>
-            <div>
-              <h1>Dev Codex</h1>
-              <p className="codex-header-desc">
-                Real-world engineering knowledge, hard-won debugging tales, architecture insights, and technical lessons from developers in the field.
-              </p>
-            </div>
+      <section className="wrap page-header">
+        <div className="page-header-flex">
+          <div className="page-header-text">
+            <div className="eyebrow">📚 Developer knowledge base</div>
+            <h1 style={{ fontSize: 'clamp(34px, 5vw, 54px)' }}>The Codex</h1>
+            <p className="lede">
+              Real bugs, real mistakes, real lessons — written by developers who've earned the right to add to it. No polished tutorials, just field notes.
+            </p>
           </div>
-          <Link to="/codex/new" className="btn btn-primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-            Write Codex Entry
-          </Link>
+          <div className="page-header-actions">
+            <Link to="/codex/new" className="btn btn-primary">
+              + Write Codex Entry
+            </Link>
+          </div>
         </div>
-      </header>
+      </section>
+
+      <section className="wrap section-tight" style={{ paddingTop: 0 }}>
 
       {/* Toolbar: Search, Sort, Categories */}
       <section className="codex-toolbar" aria-label="Filters and search">
@@ -380,6 +372,7 @@ export default function CodexPage() {
           )}
         </>
       )}
+      </section>
     </div>
   );
 }

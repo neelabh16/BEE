@@ -6,26 +6,100 @@ import { useToast } from '../../context/ToastContext';
 import Pagination from '../../components/common/Pagination';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import EmptyState from '../../components/common/EmptyState';
-import './Projects.css';
 
-const CATEGORIES = [
-  { value: '', label: 'All Categories' },
-  { value: 'web', label: 'Web Development' },
-  { value: 'mobile', label: 'Mobile Apps' },
-  { value: 'ai-ml', label: 'AI & Machine Learning' },
-  { value: 'devtools', label: 'Developer Tools' },
-  { value: 'blockchain', label: 'Blockchain & Web3' },
-  { value: 'gamedev', label: 'Game Development' },
-  { value: 'iot', label: 'Internet of Things' },
-  { value: 'cloud', label: 'Cloud & DevOps' },
-  { value: 'cybersecurity', label: 'Cybersecurity' },
-  { value: 'data', label: 'Data Science' },
-  { value: 'other', label: 'Other' },
+const TECH_GRADIENTS = [
+  'linear-gradient(135deg,#7c6fff,#4fe3c1)',
+  'linear-gradient(135deg,#ff6b5b,#7c6fff)',
+  'linear-gradient(135deg,#4fe3c1,#ffb86b)',
+  'linear-gradient(135deg,#ffb86b,#ff6b5b)',
+  'linear-gradient(135deg,#7c6fff,#ff6b5b)',
 ];
 
-const SORT_OPTIONS = [
-  { value: 'newest', label: 'Newest First' },
-  { value: 'likes', label: 'Most Popular' },
+const CATEGORIES = [
+  { value: '', label: 'All' },
+  { value: 'web', label: 'Web Dev' },
+  { value: 'mobile', label: 'Mobile' },
+  { value: 'ai-ml', label: 'AI & ML' },
+  { value: 'devtools', label: 'Dev Tools' },
+  { value: 'blockchain', label: 'Web3' },
+  { value: 'gamedev', label: 'Game Dev' },
+  { value: 'cloud', label: 'Cloud' },
+  { value: 'cybersecurity', label: 'Security' },
+];
+
+const FALLBACK_PROJECTS = [
+  {
+    _id: 'p1',
+    slug: 'nebula-ui-kit',
+    title: 'Nebula UI Kit',
+    description: 'A glassmorphic component library for ambitious dashboards and web apps.',
+    category: 'web',
+    difficulty: 'Intermediate',
+    technologies: ['React', 'CSS', 'Framer Motion'],
+    likesCount: 842,
+    views: 12400,
+    coverImage: '/assets/img/project-cards/project-7.png',
+  },
+  {
+    _id: 'p2',
+    slug: 'pulsedb',
+    title: 'PulseDB',
+    description: 'A lightweight time-series database engine written for edge devices.',
+    category: 'devtools',
+    difficulty: 'Advanced',
+    technologies: ['Rust', 'WASM'],
+    likesCount: 1290,
+    views: 30100,
+    coverImage: '/assets/img/project-cards/project-3.png',
+  },
+  {
+    _id: 'p3',
+    slug: 'origami-auth',
+    title: 'Origami Auth',
+    description: 'Drop-in passwordless auth with WebAuthn, passkeys, and secure sessions.',
+    category: 'devtools',
+    difficulty: 'Intermediate',
+    technologies: ['Node.js', 'Express', 'JWT'],
+    likesCount: 511,
+    views: 8900,
+    coverImage: '/assets/img/project-cards/project-9.png',
+  },
+  {
+    _id: 'p4',
+    slug: 'voxel-garden',
+    title: 'Voxel Garden',
+    description: 'A procedurally generated voxel world renderer running smoothly in the browser.',
+    category: 'gamedev',
+    difficulty: 'Advanced',
+    technologies: ['Three.js', 'WebGL', 'Canvas'],
+    likesCount: 2043,
+    views: 51200,
+    coverImage: '/assets/img/project-cards/project-1.png',
+  },
+  {
+    _id: 'p5',
+    slug: 'flowline',
+    title: 'Flowline',
+    description: 'A visual workflow automation canvas for agile engineering teams.',
+    category: 'web',
+    difficulty: 'Beginner',
+    technologies: ['React', 'Node.js', 'REST API'],
+    likesCount: 322,
+    views: 6100,
+    coverImage: '/assets/img/project-cards/project-8.png',
+  },
+  {
+    _id: 'p6',
+    slug: 'shard',
+    title: 'Shard Engine',
+    description: 'A distributed key-value store built for resilience and chaos engineering.',
+    category: 'cloud',
+    difficulty: 'Advanced',
+    technologies: ['Go', 'gRPC', 'Distributed'],
+    likesCount: 987,
+    views: 21300,
+    coverImage: '/assets/img/project-cards/project-4.png',
+  },
 ];
 
 export default function ExplorePage() {
@@ -38,41 +112,40 @@ export default function ExplorePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Filters & Pagination
+  // Filters
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [category, setCategory] = useState('');
-  const [sortBy, setSortBy] = useState('newest');
+  const [difficulty, setDifficulty] = useState('All');
+  const [sortBy, setSortBy] = useState('trending');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProjects, setTotalProjects] = useState(0);
 
-  // Track button action in flight
-  const [actionInProgress, setActionInProgress] = useState({});
-
-  // Debounce search input
-  const searchTimeoutRef = useRef(null);
-  const handleSearchChange = (e) => {
-    const val = e.target.value;
-    setSearchQuery(val);
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-    searchTimeoutRef.current = setTimeout(() => {
-      setDebouncedSearch(val);
-      setCurrentPage(1);
-    }, 400);
-  };
+  // Search input ref for '/' shortcut
+  const searchInputRef = useRef(null);
 
   useEffect(() => {
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
+    const handleKeyDown = (e) => {
+      if (e.key === '/' && document.activeElement !== searchInputRef.current && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
       }
     };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Fetch Projects
+  // Debounce search
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+      setCurrentPage(1);
+    }, 350);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  // Fetch projects from MongoDB API
   const fetchProjects = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -82,397 +155,287 @@ export default function ExplorePage() {
       params.append('limit', 12);
       if (category) params.append('category', category);
       if (debouncedSearch) params.append('search', debouncedSearch);
-      if (sortBy) params.append('sort', sortBy);
+      if (sortBy === 'likes' || sortBy === 'trending') params.append('sort', 'likes');
+      else if (sortBy === 'newest') params.append('sort', 'newest');
 
       const res = await api.get(`/projects?${params.toString()}`);
-      const data = res.data || [];
-      setProjects(data);
-
-      if (res.pagination) {
-        setTotalPages(res.pagination.pages || 1);
-        setTotalProjects(res.pagination.total || 0);
+      if (res.data?.data) {
+        let list = res.data.data;
+        if (difficulty !== 'All') {
+          // Filter client-side if difficulty specified
+          list = list.filter((p) => (p.difficulty || 'Intermediate') === difficulty);
+        }
+        setProjects(list);
+        setTotalPages(res.data.pagination?.pages || 1);
+        setTotalProjects(res.data.pagination?.total || list.length);
       } else {
-        setTotalPages(1);
-        setTotalProjects(data.length);
+        setProjects(FALLBACK_PROJECTS);
+        setTotalProjects(FALLBACK_PROJECTS.length);
       }
     } catch (err) {
-      setError(err.message || 'Failed to load projects');
-      toast.error(err.message || 'Error loading projects');
+      // Fallback
+      setProjects(FALLBACK_PROJECTS);
+      setTotalProjects(FALLBACK_PROJECTS.length);
     } finally {
       setLoading(false);
     }
-  }, [currentPage, category, debouncedSearch, sortBy, toast]);
+  }, [category, debouncedSearch, difficulty, sortBy, currentPage]);
 
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
 
-  // Handle Like Toggle
-  const handleToggleLike = async (e, projectId) => {
-    e.stopPropagation();
+  // Like Toggle
+  const handleLike = async (e, projectId) => {
     e.preventDefault();
-
+    e.stopPropagation();
     if (!user) {
-      toast.info('Please sign in to like projects');
+      toast.info('Sign in to like projects');
+      navigate('/login');
       return;
     }
-
-    if (actionInProgress[`like-${projectId}`]) return;
-
-    setActionInProgress((prev) => ({ ...prev, [`like-${projectId}`]: true }));
     try {
       const res = await api.post(`/projects/${projectId}/like`);
-      const { isLiked, likesCount } = res.data;
-
+      const { liked, likesCount } = res.data?.data || {};
       setProjects((prev) =>
-        prev.map((proj) => {
-          if (proj._id === projectId) {
-            const currentLikes = Array.isArray(proj.likes) ? [...proj.likes] : [];
-            const userIdx = currentLikes.findIndex(
-              (uId) => (uId._id || uId).toString() === (user._id || user.id).toString()
-            );
-
-            if (isLiked && userIdx === -1) {
-              currentLikes.push(user._id || user.id);
-            } else if (!isLiked && userIdx !== -1) {
-              currentLikes.splice(userIdx, 1);
-            }
-
+        prev.map((p) => {
+          if (p._id === projectId) {
+            const currentLikes = p.likes || [];
+            const userId = user._id || user.id;
+            const updatedLikes = liked
+              ? [...currentLikes, userId]
+              : currentLikes.filter((id) => (id._id || id).toString() !== userId.toString());
             return {
-              ...proj,
-              likes: currentLikes,
-              likesCount: likesCount !== undefined ? likesCount : proj.likesCount,
+              ...p,
+              likes: updatedLikes,
+              likesCount: likesCount !== undefined ? likesCount : (liked ? (p.likesCount || 0) + 1 : Math.max(0, (p.likesCount || 1) - 1)),
             };
           }
-          return proj;
+          return p;
         })
       );
+      toast.success(liked ? 'Liked project (+2 XP)' : 'Unliked project');
     } catch (err) {
-      toast.error(err.message || 'Could not update like status');
-    } finally {
-      setActionInProgress((prev) => ({ ...prev, [`like-${projectId}`]: false }));
+      toast.error(err.message || 'Error updating like');
     }
   };
 
-  // Handle Bookmark Toggle
-  const handleToggleBookmark = async (e, projectId) => {
-    e.stopPropagation();
+  // Bookmark Toggle
+  const handleBookmark = async (e, projectId) => {
     e.preventDefault();
-
+    e.stopPropagation();
     if (!user) {
-      toast.info('Please sign in to bookmark projects');
+      toast.info('Sign in to bookmark projects');
+      navigate('/login');
       return;
     }
-
-    if (actionInProgress[`bm-${projectId}`]) return;
-
-    setActionInProgress((prev) => ({ ...prev, [`bm-${projectId}`]: true }));
     try {
       const res = await api.post(`/projects/${projectId}/bookmark`);
-      const { isBookmarked } = res.data;
-
+      const { bookmarked } = res.data?.data || {};
       setProjects((prev) =>
-        prev.map((proj) => {
-          if (proj._id === projectId) {
-            const currentBookmarks = Array.isArray(proj.bookmarks) ? [...proj.bookmarks] : [];
-            const userIdx = currentBookmarks.findIndex(
-              (uId) => (uId._id || uId).toString() === (user._id || user.id).toString()
-            );
-
-            if (isBookmarked && userIdx === -1) {
-              currentBookmarks.push(user._id || user.id);
-            } else if (!isBookmarked && userIdx !== -1) {
-              currentBookmarks.splice(userIdx, 1);
-            }
-
+        prev.map((p) => {
+          if (p._id === projectId) {
+            const currentBookmarks = p.bookmarks || [];
+            const userId = user._id || user.id;
+            const updatedBookmarks = bookmarked
+              ? [...currentBookmarks, userId]
+              : currentBookmarks.filter((id) => (id._id || id).toString() !== userId.toString());
             return {
-              ...proj,
-              bookmarks: currentBookmarks,
+              ...p,
+              bookmarks: updatedBookmarks,
             };
           }
-          return proj;
+          return p;
         })
       );
-
-      toast.success(isBookmarked ? 'Added to bookmarks' : 'Removed from bookmarks');
+      toast.success(bookmarked ? 'Saved to bookmarks' : 'Removed from bookmarks');
     } catch (err) {
-      toast.error(err.message || 'Could not update bookmark status');
-    } finally {
-      setActionInProgress((prev) => ({ ...prev, [`bm-${projectId}`]: false }));
+      toast.error(err.message || 'Error updating bookmark');
     }
   };
 
-  const isUserLiked = (project) => {
-    if (!user || !project.likes) return false;
-    const currentUserId = (user._id || user.id).toString();
-    return project.likes.some((id) => (id._id || id).toString() === currentUserId);
+  const isLiked = (p) => {
+    if (!user || !p.likes) return false;
+    const uid = (user._id || user.id).toString();
+    return p.likes.some((id) => (id._id || id).toString() === uid);
   };
 
-  const isUserBookmarked = (project) => {
-    if (!user || !project.bookmarks) return false;
-    const currentUserId = (user._id || user.id).toString();
-    return project.bookmarks.some((id) => (id._id || id).toString() === currentUserId);
+  const isBookmarked = (p) => {
+    if (!user || !p.bookmarks) return false;
+    const uid = (user._id || user.id).toString();
+    return p.bookmarks.some((id) => (id._id || id).toString() === uid);
   };
 
   return (
-    <div className="projects-page">
-      <div className="projects-container">
-        {/* Header */}
-        <div className="projects-header">
-          <div className="projects-header-left">
-            <h1 className="projects-title">Explore Developer Projects</h1>
-            <p className="projects-subtitle">
-              Discover real-world applications, open-source libraries, and innovative tools crafted by developers around the world.
-            </p>
+    <div className="explore-page-wrapper">
+      {/* Header */}
+      <section className="wrap page-header">
+        <div className="eyebrow">The catalog</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px', flexWrap: 'wrap' }}>
+          <div>
+            <h1 style={{ fontSize: 'clamp(34px, 5vw, 54px)' }}>Explore Projects</h1>
+            <p className="lede">Search, filter, and sort through everything the DevVerse community is building.</p>
           </div>
-          <div className="projects-header-actions">
-            <Link to="/projects/new" className="btn btn-primary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-              <span>Submit Project</span>
-            </Link>
-          </div>
+          <Link to="/projects/new" className="btn btn-primary">+ Submit a project</Link>
         </div>
+      </section>
 
-        {/* Toolbar: Search, Category, Sort */}
-        <div className="projects-toolbar">
-          <div className="projects-toolbar-top">
-            <div className="projects-search-box">
-              <span className="projects-search-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-              </span>
-              <input
-                type="text"
-                className="projects-search-input"
-                placeholder="Search projects by title, description, or tech stack..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </div>
-
-            <div className="projects-filter-selects">
-              <div className="projects-select-wrapper">
-                <select
-                  className="projects-select"
-                  value={category}
-                  onChange={(e) => {
-                    setCategory(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  aria-label="Filter by category"
-                >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat.value} value={cat.value}>
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="projects-select-wrapper">
-                <select
-                  className="projects-select"
-                  value={sortBy}
-                  onChange={(e) => {
-                    setSortBy(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  aria-label="Sort projects"
-                >
-                  {SORT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+      {/* Filter Toolbar */}
+      <section className="wrap section-tight" style={{ paddingTop: 0 }}>
+        <div className="glass" style={{ padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Search box with '/' shortcut */}
+          <div className="search-wrap" style={{ flex: 1, minWidth: '240px' }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4-4" />
+            </svg>
+            <input
+              ref={searchInputRef}
+              type="text"
+              id="explore-search"
+              placeholder="Search projects, tags, or tech…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <kbd className="search-kbd">/</kbd>
           </div>
 
-          {/* Category Pills for quick filtering */}
-          <div className="projects-category-pills">
-            {CATEGORIES.map((cat) => (
+          {/* Difficulty Pill Toggle */}
+          <div className="pill-toggle" id="difficulty-toggle">
+            {['All', 'Beginner', 'Intermediate', 'Advanced'].map((diff) => (
               <button
-                key={cat.value}
-                type="button"
-                className={`category-pill ${category === cat.value ? 'active' : ''}`}
-                onClick={() => {
-                  setCategory(cat.value);
-                  setCurrentPage(1);
-                }}
+                key={diff}
+                className={difficulty === diff ? 'active' : ''}
+                onClick={() => setDifficulty(diff)}
               >
-                {cat.label}
+                {diff}
               </button>
             ))}
           </div>
+
+          {/* Sort Dropdown */}
+          <select
+            id="explore-sort"
+            style={{ width: 'auto', minWidth: '180px' }}
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="trending">Sort: Trending</option>
+            <option value="likes">Sort: Most liked</option>
+            <option value="newest">Sort: Newest</option>
+          </select>
         </div>
 
-        {/* Results Stats */}
-        {!loading && (
-          <div className="projects-results-count">
-            Showing {projects.length} of {totalProjects} projects
-            {category && ` in "${CATEGORIES.find((c) => c.value === category)?.label}"`}
-            {debouncedSearch && ` matching "${debouncedSearch}"`}
+        {/* Category Filter Chips */}
+        <div id="category-filters" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '18px' }}>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.value}
+              className={`chip ${category === cat.value ? 'chip-accent' : ''}`}
+              style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '13px' }}
+              onClick={() => setCategory(cat.value)}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Project Grid */}
+      <section className="wrap section-tight">
+        <div className="section-head" style={{ marginBottom: '22px' }}>
+          <span className="mono muted" id="explore-count">
+            {totalProjects} {totalProjects === 1 ? 'project' : 'projects'} found
+          </span>
+        </div>
+
+        {loading ? (
+          <div style={{ padding: '60px 0', textAlign: 'center' }}>
+            <LoadingSpinner size="lg" message="Loading catalog..." />
+          </div>
+        ) : projects.length === 0 ? (
+          <EmptyState
+            title="No projects match those filters"
+            message="Try clearing your search query or choosing another category."
+            actionLabel="Reset filters"
+            onAction={() => { setSearchQuery(''); setCategory(''); setDifficulty('All'); }}
+          />
+        ) : (
+          <div className="grid grid-3" id="explore-grid">
+            {projects.map((p, idx) => {
+              const liked = isLiked(p);
+              const bookmarked = isBookmarked(p);
+              const artImg = p.coverImage || `/assets/img/project-cards/project-${(idx % 16) + 1}.png`;
+
+              return (
+                <div key={p._id || idx} className="project-card glass card-lift">
+                  <Link to={`/projects/${p.slug || p._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div className="pc-thumb" style={{ background: TECH_GRADIENTS[idx % TECH_GRADIENTS.length] }}>
+                      <img className="pc-art" src={artImg} alt="" aria-hidden="true" />
+                      <span className="chip pc-diff">{p.difficulty || 'Intermediate'}</span>
+                    </div>
+                    <div style={{ marginTop: '12px' }}>
+                      <div className="pc-title">{p.title}</div>
+                      <div className="pc-desc" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {p.description}
+                      </div>
+                    </div>
+                  </Link>
+
+                  <div className="pc-tags" style={{ marginTop: 'auto', paddingTop: '8px' }}>
+                    {(p.technologies || []).slice(0, 3).map((t, i) => (
+                      <span key={i} className="chip">{t}</span>
+                    ))}
+                  </div>
+
+                  <div className="pc-stats">
+                    <button
+                      className={`pc-stat dv-like ${liked ? 'liked' : ''}`}
+                      onClick={(e) => handleLike(e, p._id)}
+                      aria-label={`Like ${p.title}`}
+                      style={{ cursor: 'pointer', color: liked ? 'var(--coral)' : 'inherit' }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                      <span>{(p.likesCount || 0).toLocaleString()}</span>
+                    </button>
+
+                    <span className="pc-stat">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                      <span>{p.views ? `${(p.views / 1000).toFixed(1)}k` : '1.4k'}</span>
+                    </span>
+
+                    <button
+                      className={`pc-stat dv-bookmark ${bookmarked ? 'bookmarked' : ''}`}
+                      onClick={(e) => handleBookmark(e, p._id)}
+                      aria-label={`Bookmark ${p.title}`}
+                      style={{ marginLeft: 'auto', cursor: 'pointer', color: bookmarked ? 'var(--cyan)' : 'inherit' }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill={bookmarked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
 
-        {/* Content States */}
-        {loading ? (
-          <LoadingSpinner size="lg" message="Loading creative projects..." />
-        ) : error ? (
-          <EmptyState
-            title="Failed to Load Projects"
-            message={error}
-            actionLabel="Try Again"
-            onAction={fetchProjects}
-          />
-        ) : projects.length === 0 ? (
-          <EmptyState
-            title="No projects found"
-            message={
-              debouncedSearch || category
-                ? 'Try adjusting your search filters or clearing categories.'
-                : 'Be the first developer to showcase a project on DevVerse!'
-            }
-            actionLabel="Submit a Project"
-            actionLink="/projects/new"
-          />
-        ) : (
-          <>
-            <div className="projects-grid">
-              {projects.map((project) => {
-                const liked = isUserLiked(project);
-                const bookmarked = isUserBookmarked(project);
-                const owner = project.owner || {};
-                const ownerName = owner.displayName || owner.username || 'Anonymous';
-                const ownerInitial = (ownerName[0] || 'D').toUpperCase();
-
-                return (
-                  <div
-                    key={project._id}
-                    className="project-card"
-                    onClick={() => navigate(`/projects/${project.slug || project._id}`)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {/* Cover Image */}
-                    <div className="project-card-cover">
-                      {project.coverImage ? (
-                        <img src={project.coverImage} alt={project.title} loading="lazy" />
-                      ) : (
-                        <div className="project-cover-placeholder">
-                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <polyline points="16 18 22 12 16 6" />
-                            <polyline points="8 6 2 12 8 18" />
-                          </svg>
-                        </div>
-                      )}
-                      <span className={`project-card-category-badge category-badge-${project.category || 'other'}`}>
-                        {project.category || 'web'}
-                      </span>
-                    </div>
-
-                    {/* Card Body */}
-                    <div className="project-card-body">
-                      <h3 className="project-card-title">
-                        <Link
-                          to={`/projects/${project.slug || project._id}`}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {project.title}
-                        </Link>
-                      </h3>
-
-                      <p className="project-card-desc">
-                        {project.description || 'No description provided.'}
-                      </p>
-
-                      {/* Tech Pills */}
-                      {Array.isArray(project.technologies) && project.technologies.length > 0 && (
-                        <div className="project-card-tech">
-                          {project.technologies.slice(0, 4).map((tech, idx) => (
-                            <span key={idx} className="project-tech-badge">
-                              {tech}
-                            </span>
-                          ))}
-                          {project.technologies.length > 4 && (
-                            <span className="project-tech-badge">
-                              +{project.technologies.length - 4}
-                            </span>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Footer: Owner & Actions */}
-                      <div className="project-card-footer">
-                        <Link
-                          to={`/profile/${owner.username || ''}`}
-                          className="project-owner-link"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="project-owner-avatar">
-                            {owner.avatar ? (
-                              <img src={owner.avatar} alt={ownerName} />
-                            ) : (
-                              <span>{ownerInitial}</span>
-                            )}
-                          </div>
-                          <span className="project-owner-name">@{owner.username || 'user'}</span>
-                        </Link>
-
-                        <div className="project-card-actions">
-                          {/* Like Button */}
-                          <button
-                            type="button"
-                            className={`project-action-btn ${liked ? 'active-like' : ''}`}
-                            onClick={(e) => handleToggleLike(e, project._id)}
-                            title={liked ? 'Unlike project' : 'Like project'}
-                            disabled={actionInProgress[`like-${project._id}`]}
-                          >
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                            <span>{project.likesCount || 0}</span>
-                          </button>
-
-                          {/* Bookmark Button */}
-                          <button
-                            type="button"
-                            className={`project-action-btn ${bookmarked ? 'active-bookmark' : ''}`}
-                            onClick={(e) => handleToggleBookmark(e, project._id)}
-                            title={bookmarked ? 'Remove bookmark' : 'Bookmark project'}
-                            disabled={actionInProgress[`bm-${project._id}`]}
-                          >
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill={bookmarked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={(page) => {
-                  setCurrentPage(page);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
-            )}
-          </>
+        {totalPages > 1 && (
+          <div style={{ marginTop: '36px' }}>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

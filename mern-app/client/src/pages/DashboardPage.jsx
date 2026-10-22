@@ -243,7 +243,7 @@ export default function DashboardPage() {
   const displayName = user?.displayName || user?.name || user?.username || 'Builder';
 
   return (
-    <div className="dashboard-page">
+    <div className="dashboard-page wrap" style={{ paddingTop: '20px' }}>
       <div className="dashboard-container">
         {/* ================= WELCOME SECTION ================= */}
         <section className="dashboard-welcome-section">
